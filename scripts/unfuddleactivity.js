@@ -12,8 +12,10 @@ var Item = React.createClass({
               <td>{this.props.description}</td>
               <td>{this.props.person_name}({this.props.person_id})</td>
               <td>{this.props.record_type}</td>
-              <td>{this.props.record_id;}</td>
+              <td>{this.props.record_id}</td>
               <td>{this.props.extraData}</td>
+              <td>{this.props.ticketNumber}</td>
+              <td>{this.props.ticketDescription}</td>
             </tr>
     );
   }
@@ -24,10 +26,15 @@ var ItemList = React.createClass({
   render: function() {
    var self = this;
    var itemNodes = this.props.data.map(function(item) {
-      var personName = "";
+      var personName = "", ticketNumber="",ticketDescription="";
       // some items dont have associated people
       if (self.props.people[item.person_id] != null)
         personName = self.props.people[item.person_id];
+
+      if (item.record && item.record.ticket) {
+        ticketNumber = item.record.ticket.number;
+        ticketDescription = item.record.ticket.summary;
+      }
 
       return (
         <Item key={item.id}
@@ -39,6 +46,8 @@ var ItemList = React.createClass({
           person_name={personName}
           record_type ={item.record_type}
           record={item.record}
+          ticketNumber={ticketNumber}
+          ticketDescription={ticketDescription}
           >
         </Item>
       );
@@ -55,6 +64,8 @@ var ItemList = React.createClass({
               <th>Record Type</th>
               <th>Record ID</th>
               <th>Data</th>
+              <th>Ticket Number</th>
+              <th>Ticket Summary</th>
             </tr>
             {itemNodes}
           </tbody>
